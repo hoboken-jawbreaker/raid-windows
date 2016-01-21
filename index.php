@@ -2,11 +2,13 @@
 <html>
 
 <head>
-    <title>hi</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js">
+  </script>
+  <script type="text/javascript" src="js/gantt-demo.js"></script>
 </head>
 
 <body>
-    <span>hello, world.</span>
+  <div id="chart_div"></div>
 </body>
 
 </html>
