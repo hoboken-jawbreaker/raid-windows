@@ -66,7 +66,7 @@ var ganttdemo = function() {
                 }
             };
 
-            var div = document.getElementById('chart_div');
+            var div = document.getElementById('chart');
             var chart = new google.visualization.Gantt(div);
 
             chart.draw(data, options);
@@ -77,3 +77,4 @@ var ganttdemo = function() {
         main: main
     };
 }();
+Object.keys(ganttdemo); // suppress unused warning

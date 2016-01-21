@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  <div id="chart_div"></div>
+  <div id="chart"></div>
 </body>
 
 <script>/* global ganttdemo */ ganttdemo.main();</script>
