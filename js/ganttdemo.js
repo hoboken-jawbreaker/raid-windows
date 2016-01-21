@@ -69,17 +69,13 @@ var ganttdemo = function() {
                     trackHeight: trackHeight,
                     barHeight: 12,
                     barCornerRadius: 2,
-                    innerGridDarkTrack: {
-                        fill: '#181818'
-                    },
+                    innerGridDarkTrack: { fill: '#181818' },
                     labelStyle: {
                       fontName: 'sans-serif',
                       fontSize: 14
                     }
                 },
-                backgroundColor: {
-                    fill: '#2b2b2b'
-                }
+                backgroundColor: { fill: '#2b2b2b' }
             };
 
             var div = document.getElementById('chart');
