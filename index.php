@@ -4,11 +4,12 @@
 <head>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js">
   </script>
-  <script type="text/javascript" src="js/gantt-demo.js"></script>
+  <script type="text/javascript" src="js/ganttdemo.js"></script>
 </head>
 
 <body>
   <div id="chart_div"></div>
 </body>
 
+<script>/* global ganttdemo */ ganttdemo.main();</script>
 </html>
