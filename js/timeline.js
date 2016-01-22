@@ -152,53 +152,49 @@ function indexMonth(month) {
     }[month];
 }
 
-google.charts.load('current', { 'packages': ['timeline'] });
+google.charts.load('current', {'packages': ['timeline']});
 google.charts.setOnLoadCallback(drawChart);
 window.onresize = drawChart;
 
 function drawChart() {
-    var container = document.getElementById('timeline');
-    var chart = new google.visualization.Timeline(container);
-    var dataTable = new google.visualization.DataTable();
-
-    dataTable.addColumn({
+    var table = new google.visualization.DataTable();
+    table.addColumn({
         type: 'string',
-        id: 'Mob'
+        id: 'MobName'
     });
-    dataTable.addColumn({
+    table.addColumn({
         type: 'string',
-        id: 'DummyBarLabel'
+        id: 'BarLabel'
     });
-    dataTable.addColumn({
+    table.addColumn({
         type: 'string',
         role: 'tooltip'
     });
-    dataTable.addColumn({
+    table.addColumn({
         type: 'date',
         id: 'Start'
     });
-    dataTable.addColumn({
+    table.addColumn({
         type: 'date',
         id: 'End'
     });
 
     for (var i in mobs) {
-        dataTable.addRow(row(mobs[i]));
+        table.addRow(row(mobs[i]));
     }
 
+    var container = document.getElementById('timeline');
+    var chart = new google.visualization.Timeline(container);
     var options = {
-        height: 2048,
-        timeline: {
-            barLabelStyle: { fontSize: 10 }
-        }
+        height: 2048
     };
-    chart.draw(dataTable, options);
+    chart.draw(table, options);
 }
 
 function row(mob) {
     var name = mob.name();
-    var label = mob.windowString();
+    var tooltip = mob.windowString();
     var start = mob.windowStart();
     var end = mob.windowEnd();
-    return [name, null, label, start, end];
+    return [name, null, tooltip, start, end];
 }
