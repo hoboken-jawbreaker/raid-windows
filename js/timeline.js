@@ -168,7 +168,8 @@ function drawChart() {
     });
     table.addColumn({
         type: 'string',
-        role: 'tooltip'
+        role: 'tooltip',
+        p: {html: true}
     });
     table.addColumn({
         type: 'date',
@@ -186,7 +187,8 @@ function drawChart() {
     var container = document.getElementById('timeline');
     var chart = new google.visualization.Timeline(container);
     var options = {
-        height: 2048
+        height: 2048,
+        isHtml: true
     };
     chart.draw(table, options);
 }
