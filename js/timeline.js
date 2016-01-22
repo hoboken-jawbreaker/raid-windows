@@ -167,7 +167,11 @@ function drawChart() {
     });
     dataTable.addColumn({
         type: 'string',
-        id: 'Window'
+        id: 'DummyBarLabel'
+    });
+    dataTable.addColumn({
+        type: 'string',
+        role: 'tooltip'
     });
     dataTable.addColumn({
         type: 'date',
@@ -182,7 +186,13 @@ function drawChart() {
         dataTable.addRow(row(mobs[i]));
     }
 
-    chart.draw(dataTable, { height: 2200 });
+    var options = {
+        height: 2048,
+        timeline: {
+            barLabelStyle: { fontSize: 10 }
+        }
+    };
+    chart.draw(dataTable, options);
 }
 
 function row(mob) {
@@ -190,5 +200,5 @@ function row(mob) {
     var label = mob.windowString();
     var start = mob.windowStart();
     var end = mob.windowEnd();
-    return [name, label, start, end];
+    return [name, null, label, start, end];
 }
