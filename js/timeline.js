@@ -52,6 +52,10 @@ var deaths = [
     "27-Dec 19:00 Zlandicar"
 ];
 
+function formatDate(date) {
+    return dateFormat(date, 'm/d (h:MM TT)');
+}
+
 var Mob = function Mob(_name, _death) {
     function name() {
         return _name;
@@ -78,15 +82,25 @@ var Mob = function Mob(_name, _death) {
     }
 
     function windowString() {
-        var format = 'm/d (h:MM TT)';
-        var start = dateFormat(windowStart(), format);
-        var end = dateFormat(windowEnd(), format);
-        return start + ' to ' + end;
+        return formatDate(windowStart()) + ' to ' + formatDate(windowEnd());
     }
 
-    function toString() {
-        var format = 'm/d (h:MM TT)';
-        return name() + ' [' + dateFormat(death(), format) + ']';
+    function windowStatusMessage() {
+        var now = new Date(Date.now()).getTime();
+        var start = windowStart().getTime();
+        var deltaStart = now - start;
+
+        var started = deltaStart > 0;
+        if (started) {
+            var deltaEnd = now - windowEnd().getTime();
+
+            var ended = deltaEnd > 0;
+            if (ended) {
+                return 'Window closed ' + timeDeltaString(deltaEnd) + ' ago.';
+            }
+            return 'Window closes in ' + timeDeltaString(deltaEnd) + '.';
+        }
+        return 'Window opens in ' + timeDeltaString(deltaStart) + '.';
     }
 
     return {
@@ -96,6 +110,7 @@ var Mob = function Mob(_name, _death) {
         windowEnd: windowEnd,
         isOpen: isOpen,
         windowString: windowString,
+        windowStatusMessage: windowStatusMessage,
         toString: toString,
     };
 };
@@ -220,8 +235,75 @@ function chartHeight(rowCount) {
 
 function row(mob) {
     var name = mob.name();
-    var tooltip = mob.windowString();
     var start = mob.windowStart();
     var end = mob.windowEnd();
-    return [name, null, tooltip, start, end];
+    return [name, null, tooltip(mob), start, end];
+}
+
+function tooltip(mob) {
+    var html =
+        '<div class="tooltip">' +
+            '<ul class="tooltip-title-list">' +
+                '<li class="tooltip-title">' + mob.name() + '</li>' +
+            '</ul>' +
+            '<div class="tooltip-separator"></div>' +
+            '<ul class="tooltip-entry-list">' +
+                '<li class="tooltip-entry">' +
+                    mob.windowStatusMessage() +
+                '</li>' +
+                '<li class="tooltip-entry">' +
+                    '<strong>Open: </strong>' + formatDate(mob.windowStart()) +
+                '</li>' +
+                '<li class="tooltip-entry">' +
+                    '<strong>Close: </strong>' + formatDate(mob.windowEnd()) +
+                '</li>' +
+            '</ul>' +
+        '</div>';
+    return html;
+}
+
+function timeDeltaString(milliseconds) {
+    var delta = new Date(Math.abs(milliseconds));
+
+    // todo: sloppy as fuck
+    var formation = {
+        string: '',
+        count: 0,
+        max: 2,
+        form: function() {
+            this.append(delta.getDate() - 1, 'day', 'days');
+            this.append(delta.getHours(), 'hour', 'hours');
+            this.append(delta.getMinutes(), 'minute', 'minutes');
+            this.append(delta.getSeconds(), 'second', 'seconds');
+            if (!this.string) {
+                this.string = 'now';
+            }
+        },
+        append: function(value, singular, plural) {
+            if (value <= 0) {
+                return;
+            }
+            if (this.count >= this.max) {
+                return;
+            }
+
+            this.count += 1;
+
+            if (this.string) {
+                this.string += ', ';
+            }
+            this.string += value;
+
+            this.string += ' ';
+            if (value == 1) {
+                this.string += singular;
+            }
+            else {
+                this.string += plural;
+            }
+        }
+    };
+
+    formation.form();
+    return formation.string;
 }
