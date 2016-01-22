@@ -152,7 +152,9 @@ function indexMonth(month) {
     }[month];
 }
 
-google.charts.load('current', {'packages': ['timeline']});
+google.charts.load('current', {
+    'packages': ['timeline']
+});
 google.charts.setOnLoadCallback(drawChart);
 window.onresize = drawChart;
 
@@ -187,10 +189,33 @@ function drawChart() {
     var container = document.getElementById('timeline');
     var chart = new google.visualization.Timeline(container);
     var options = {
-        height: 2048,
+        width: chartWidth(),
+        height: chartHeight(mobs.length),
         isHtml: true
     };
     chart.draw(table, options);
+}
+
+function chartWidth() {
+    var scrollbar = 30;
+    var fitted = window.innerWidth - scrollbar;
+
+    var minimum = 1024;
+    if (fitted < minimum) {
+        return minimum;
+    }
+    return fitted;
+}
+
+function chartHeight(rowCount) {
+    var rowHeight = 42;
+    var dataHeight = rowCount * rowHeight;
+
+    var hAxisLabelHeight = 25;
+    var hAxisLabelPadding = 12;
+    var hAxisHeight = hAxisLabelHeight + 2 * hAxisLabelPadding;
+
+    return dataHeight + hAxisHeight;
 }
 
 function row(mob) {
